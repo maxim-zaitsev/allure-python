@@ -1,2 +1,7 @@
 steps:
-  --name: Test Commons
+  - name: Build python-commons-test
+    run: |
+      python -m doctest ./src/container.py
+      python -m doctest ./src/report.py
+      python -m doctest ./src/label.py
+      python -m doctest ./src/result.py
