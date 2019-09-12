@@ -1,4 +1,4 @@
-run:
+runs:
   steps:
     - name: Build python-commons-test
       run: |
