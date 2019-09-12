@@ -1,9 +1,26 @@
-on: [push]
+name: Build
+
+on:
+  push:
+    branches:
+      - workflow
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v1
-    - uses: ./.github/actions/allure-python-commons-test
+    container:
+      image: randomknowledge/docker-pyenv-tox
+
+  steps:
+  - uses: actions/checkout@v1
+  - name: Build Commons Test
+    run: tox -r --workdir=/tmp -c allure-python-commons-test/tox.ini
+  - name: Build Commons
+    run: tox -r --workdir=/tmp -c allure-python-commons/tox.ini
+  - name: Build PyTest
+    run: tox -r --workdir=/tmp -c allure-pytest/tox.ini
+  - name: Build Behave
+    run: tox -r --workdir=/tmp -c allure-behave/tox.ini
+  - name: Build RobotFramework
+    run: tox -r --workdir=/tmp -c allure-robotframework/tox.ini
