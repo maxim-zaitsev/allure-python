@@ -85,6 +85,15 @@ def pytest_addoption(parser):
                                          help="""Comma-separated list of story names.
                                          Run tests that have at least one of the specified story labels.""")
 
+    parser.getgroup("general").addoption('--allure-ids',
+                                         action="store",
+                                         dest="allure_ids",
+                                         metavar="IDS_SET",
+                                         default={},
+                                         type=label_type(LabelType.ID),
+                                         help="""Comma-separated list of testcase ids.
+                                                 Run tests that have at least one of the specified id labels.""")
+
     def link_pattern(string):
         pattern = string.split(':', 1)
         if not pattern[0]:
@@ -143,7 +152,8 @@ def select_by_labels(items, config):
     arg_labels = set().union(config.option.allure_epics,
                              config.option.allure_features,
                              config.option.allure_stories,
-                             config.option.allure_severities)
+                             config.option.allure_severities,
+                             config.option.allure_ids)
     return filter(lambda item: arg_labels & set(allure_labels(item)) if arg_labels else True, items)
 
 
